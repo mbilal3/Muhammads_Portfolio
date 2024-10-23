@@ -9,4 +9,6 @@ The goal of the project was to perform an explanatory data analysis using R on d
 
 ![](1.2.png)
 
+![](1.3.png)
+
 
