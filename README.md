@@ -7,9 +7,9 @@ The goal of the project was to perform an explanatory data analysis using R on d
 
 < br/> 
 ![](/Auto_Claim_Analysis/1.1.png)
-
+< br/> 
 ![](/Auto_Claim_Analysis/1.2.png)
-
+< br/> 
 ![](/Auto_Claim_Analysis/1.3.png)
 
 
