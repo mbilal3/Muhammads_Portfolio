@@ -56,8 +56,11 @@ This was a polyglot programming project where Python programming language was ut
 The project involved the utlization of Python's BeautifulSoup library in order to extract, clean, and explore the Top500 datasets. The data was obtained from the top 500 website. (https://top500.org).
 As a result of the analysis, I created 3 csv datasets: for US, China, and Japan. Alternately, created one dataset with all three countries combined and appropriately labeled. The data cleaning was performed using the Python String Fuction. The dataset was then leveraged to explore the following parameters: 
 
-- For each country, compare summary stats and visualizations for Rank, Cores, Rpeak, and Power were analyzed.
-- Which countries has the best stats in each category were examined. 
+- For each country, summary stats and visualizations for Rank, Cores, Rpeak, and Power were analyzed.
+- Best stats in each category for all the countires part of the analysis were examined. 
 - Listed the most frequently used processors for each country’s supercomputers.
+
+![](Screen_Scraping_Extract_Data_from_Websites/cores_and_powers.png)
+<p align="center">A visual from dataset depicting correlation between cores and powers </p>
 
 
