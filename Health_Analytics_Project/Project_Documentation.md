@@ -13,5 +13,5 @@ The first step of the feature selection process was to check for statistically s
 ‘Diagnosis’ Column was the variable of interest and hence served as the dependent/response variable. The column indicated whether a cell was diagnosed as either Malignant - affected by cancer or Benign - unaffected by cancer. The dataset comprises ten real-valued features that were determined for each cell nuclei. The features include cell radius, texture, perimeter, area, smoothness, compactness, concavity, concave points, symmetry, and fractal dimension. Furthermore, the mean, standard error, and the largest(mean of the three largest values) were computed for each of the features for all of the images, making it a total of 31 independent/predictor variables. 
 
 
-![](Health_Analytics_Project/performance_comparisions.png)
+![](performance_comparisions.png)
 <p align="center">Horizontal Bar chart summarizing performance metrics for each of the models </p>
