@@ -1,3 +1,4 @@
+theme: jekyll-theme-minimal
 # Muhammad Bilal's Analytics Portfolio
 
 
