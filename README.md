@@ -50,7 +50,7 @@ This was a polyglot programming project where Python programming language was ut
 
 ![](NY_Leading_Cause_of_Deaths_Analysis/20_causes_of_death.jpeg)
 
-Key Findings: Top 20 causes of Dealth
+<p align="center">Key Findings: Top 20 causes of Dealth in NYC as per the Dataset analyzed </p>
 
 
 
