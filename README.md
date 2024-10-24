@@ -19,4 +19,4 @@ The goal of the project was to perform an explanatory analysis followed by a pre
 <p align="center">Top 10 highly important predictor variables extracted using the importance scores of the Random Forest model </p>
 
 ![](Machine_Learning_Driven_Customer_Churn_Analysis/rand_forest2.png)
-<p align="center">Graph displaying the ROC_AUC Curve for the Random Forest model. The AUC value of 0.96 incdicates that the model is highly reliable and hence was the best performing on this dataset </p>
+<p align="center">Graph displaying the ROC_AUC Curve for the Random Forest model. The AUC value of 0.96 indicates that the model is highly reliable and hence was the best performing on this dataset </p>
