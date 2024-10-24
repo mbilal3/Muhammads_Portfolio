@@ -32,12 +32,12 @@ The prime objective of the research was to develop a Machine Learning model that
 As a part of the project, I explored two news articles published around the subject of Brexit in two different news papers (FOX News and The Independent) using Python's NLTK library. The process involved the generation of word frequency counts and plots (with stop words eliminated) for each article. I also analyzed if there was a difference in vocabulary or sentiment between the two articles and speculated about any observed differences.
 
  
-<div align="center"> 
+
   
- ![](NLP_Python_NLTK_Project/Freq_dist_foxnews.png) </div>
+ ![](NLP_Python_NLTK_Project/Freq_dist_foxnews.png) 
  
 
-<p align="center"> Top 25 Most Frequent word Count Distribution (Fox News Article) </p>
+Top 25 Most Frequent word Count Distribution (Fox News Article) 
 
 <div align="center"> 
 
