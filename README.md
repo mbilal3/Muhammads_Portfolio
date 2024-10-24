@@ -29,7 +29,7 @@ The prime objective of the research was to develop a Machine Learning model that
 
 # [NLP News Article Analysis with Python and NLTK](https://github.com/mbilal3/Muhammads_portfolio/tree/main/NLP_Python_NLTK_Project)
 
-As a part of the project, I explored two news articles using Python's NLTK library. The process involved the generation of word frequency counts and plots (with stop words eliminated) for each article. I also analyzed if there was a difference in vocabulary or sentiment between the two articles and speculated about any observed differences.
+As a part of the project, I explored two news articles published around the subject of Brexit in two different news papers (FOX News and The Independent) using Python's NLTK library. The process involved the generation of word frequency counts and plots (with stop words eliminated) for each article. I also analyzed if there was a difference in vocabulary or sentiment between the two articles and speculated about any observed differences.
 
  
 <div align="center"> 
