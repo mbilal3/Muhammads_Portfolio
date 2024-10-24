@@ -44,3 +44,5 @@ Top 25 Most Frequent word Count Distribution (Fox News Article)
  ![](NLP_Python_NLTK_Project/freq_dist_theindependent.png) 
  
  Top 25 Most Frequent word Count Distribution (The Independent News Article) 
+
+# [Mortality Analysis for the City of New York](https://github.com/mbilal3/Muhammads_portfolio/blob/main/NY_Leading_Cause_of_Deaths_Analysis/Project%20Documentation.pdf)) 
