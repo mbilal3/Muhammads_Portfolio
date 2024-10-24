@@ -19,3 +19,7 @@ The first step of the feature selection process was to check for statistically s
 
 ![](roc_logistic_reg.jpeg)
 <p align="center">ROC curve for the logistic regression model </p>
+
+![](rf_auc.png)
+<p align="center">ROC curve for the Random Forest model </p>
+
