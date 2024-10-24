@@ -33,7 +33,7 @@ As a part of the project, I explored two news articles using Python's NLTK libra
 
 <p align="center">   
 
-  ![](NLP_Python_NLTK_Project/Freq_dist_foxnews.png)
+  <![](NLP_Python_NLTK_Project/Freq_dist_foxnews.png)>
 </p>  
 
 <p align="center"> Top 25 Most Frequent word Count Distribution (Fox News Article) </p>
