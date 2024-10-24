@@ -5,9 +5,9 @@ The prime objective of the research was to develop a Machine Learning model that
 # Methods
 ## a. Data source
 The data set is taken from the Wisconsin diagnostic breast cancer research database, collected by Dr. William H Wolberg, University Of Wisconsin Hospitals, Madison. 
-b. 	Data preprocessing
+## b. Data preprocessing
 The data was checked for any of the missing values. Fortunately, the dataset did not have any kind of missing values, so no treatment was needed in this regard. We then had to binarize and convert the response variable into a factor. 
-c.  	Feature selection process
+##  c. Feature selection process
 The first step of the feature selection process was to check for statistically significant variables. In order to achieve this, we started off by implementing logistic regression models with ‘Diagnosis’ as the response variable and each of the other variables part of the dataset as the predictor variables. We ended up producing 31 independent logistic regression models. A variable was considered statistically significant if its model with the response variable showcased a p value of less than 0.05. Any of the models exhibiting p value greater than the 0.05  indicated that the variable involved did not hold any predictive value and was hence statistically insignificant. This process helped us eliminate 7 statistically insignificant variables. The variables were removed from the dataset and the later part of the analysis was performed on the modified dataset. 
-d. 	Description of dependent and independent variables
+## d.	Description of dependent and independent variables
 ‘Diagnosis’ Column was the variable of interest and hence served as the dependent/response variable. The column indicated whether a cell was diagnosed as either Malignant - affected by cancer or Benign - unaffected by cancer. The dataset comprises ten real-valued features that were determined for each cell nuclei. The features include cell radius, texture, perimeter, area, smoothness, compactness, concavity, concave points, symmetry, and fractal dimension. Furthermore, the mean, standard error, and the largest(mean of the three largest values) were computed for each of the features for all of the images, making it a total of 31 independent/predictor variables. 
