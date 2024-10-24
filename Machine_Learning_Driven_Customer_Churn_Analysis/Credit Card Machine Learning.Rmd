@@ -1,0 +1,442 @@
+---
+title: "Machine Learning Project"
+---
+
+
+```{r warning = FALSE, message = FALSE}
+# Suppress dplyr summarise grouping warning messages
+options(dplyr.summarise.inform = FALSE)
+
+library(tidyverse)
+library(tidymodels)
+library(dplyr)
+library(parsnip)
+library(vip)
+library(discrim)
+library(klaR)
+library(rpart.plot)
+library(ranger)
+
+credit_card_df <- readRDS(url('https://gmubusinessanalytics.netlify.app/data/credit_card_df.rds'))
+
+summary(credit_card_df)
+
+```
+
+
+
+# Data Analysis
+
+# Question 1
+
+
+**Question**:
+How do the Card Type and Customer income impact customer's decision to cancel the account?
+
+**Answer**:
+Two data frames and a bar graph were created in order to answer the question. The customer's average income seemed to have very little effect on the customer's decision to retain the account. The general trend that the customer's that fell on the lower end of the income spectrum were more inclined to close their account was violated by the Gold account holders where the average income for the customers who canceled their accounts came out to be $65,357, a number significantly greater than the average income for the gold customers that chose to keep their accounts, $62,304. The card type, however, did seem to influence customer's decision. The churn rate for the blue card holders came out to be highest as 1497 users chose to close their accounts while only 1054 decided to keep their accounts. Silver card holders showcased the best user retention where 872 customers opted to continue using the services and only 296 chose to have their cards canceled. 
+
+```{r}
+
+#Count Account closed
+Summary_1 <- credit_card_df %>% filter(card_type == "blue",customer_status == "closed_account") %>% count()
+view(Summary_1)
+Summary_2 <- credit_card_df %>% filter(card_type == "silver",customer_status == "closed_account") %>% count()
+view(Summary_2)
+Summary_3 <- credit_card_df %>% filter(card_type == "gold",customer_status == "closed_account") %>% count()
+view(Summary_3)
+
+#Count Account Active
+Summary_act1 <- credit_card_df %>% filter(card_type == "blue",customer_status == "active") %>% count()
+view(Summary_act1)
+Summary_act2 <- credit_card_df %>% filter(card_type == "silver",customer_status == "active") %>% count()
+view(Summary_act2)
+Summary_act3 <- credit_card_df %>% filter(card_type == "gold",customer_status == "active") %>% count()
+view(Summary_act3)
+
+counts <- data.frame(Summary_act1,Summary_1, Summary_act2, Summary_2, Summary_act3, Summary_3)
+
+colnames(counts) <- c("Number of Active Accounts (Blue)","Number of Closed Accounts (Blue)","Number of Active Accounts (Silver)","Number of Closed Accounts (Silver)","Number of Active Accounts (Gold)","Number of Closed Accounts (Gold)")
+
+view(counts)
+  
+avg_income_act_blue <- credit_card_df %>% filter(card_type == "blue", customer_status == "active") %>% summarize(mean(income))
+avg_income_cancel_blue <- credit_card_df %>% filter(card_type == "blue", customer_status == "closed_account") %>% summarize(mean(income))
+
+avg_income_act_silver <- credit_card_df %>% filter(card_type == "silver", customer_status == "active") %>% summarize(mean(income))
+avg_income_cancel_silver <- credit_card_df %>% filter(card_type == "silver", customer_status == "closed_account") %>% summarize(mean(income))
+
+avg_income_act_gold <- credit_card_df %>% filter(card_type == "gold", customer_status == "active") %>% summarize(mean(income))
+avg_income_cancel_gold <- credit_card_df %>% filter(card_type == "gold", customer_status == "closed_account") %>% summarize(mean(income))
+
+df0 <- data.frame(avg_income_act_blue, avg_income_cancel_blue , avg_income_act_silver , avg_income_cancel_silver , avg_income_act_gold , avg_income_cancel_gold)
+
+colnames(df0) <- c("Average Income Active Accounts Blue","Average Income Canceled Accounts Blue", "Average Income Active Accounts Silver", "Average Income Canceled Accounts Silver", "Average Income Active Accounts Gold", "Average Income Canceled Accounts Gold")
+view(df0)
+
+center_title <- theme(plot.title=element_text(hjust=0.5))
+
+A <- ggplot(data=credit_card_df,aes(x= customer_status, y = income,fill=card_type))  +geom_bar(show.legend = FALSE, stat="summary",position = "dodge", fun = "mean") + facet_grid( ~card_type)  +xlab("Customer Account Status") +ylab("Average Income") +ggtitle("The impact of Customer Income and Card Type on \n Account retention") + center_title
+plot(A)
+
+```
+
+
+
+# Question 2
+
+
+**Question**:
+How does Customer Account Spending impact their decision on whether to keep the account or have it canceled?
+
+**Answer**:
+The graph and the data frame make it very clear that the more a customer spends using their account, the greater the likelihood of them deciding to keep their accounts. The average last year spendings for the customers that chose to keep their accounts was $4596, a number considerably higher than those of the customers which decided against keeping their account, $3120.
+
+
+```{r}
+bad_customers <- credit_card_df %>% filter(customer_status == "closed_account")
+
+summary(bad_customers)
+
+spent_active <- credit_card_df %>% filter(customer_status == "active") %>% summarize(mean(total_spend_last_year))
+view(spent_active)
+
+spent_canceled <- credit_card_df %>% filter(customer_status == "closed_account") %>% summarize(mean(total_spend_last_year))
+view(spent_canceled)
+
+df1 <- data.frame(spent_active,spent_canceled)
+colnames(df1) <- c("Last year spendings of Active Customers (Avg)","Last year spendings of Closed Accounts (Avg)")
+view(df1)
+
+B <- ggplot(data=credit_card_df,aes(x= customer_status, y = total_spend_last_year))  +geom_bar(show.legend = FALSE, stat="summary",position = "dodge", fun = "mean") +xlab("Customer Account Status") +ylab("Average Amount Spent") +ggtitle("The impact of Customer Spendings on \n Account retention") + center_title
+plot(B)
+
+
+```
+
+
+# Question 3
+
+
+**Question**:
+Does Q4 to Q1 transaction ratio have any impact on customer's decision to cancel their accounts?
+
+**Answer**:
+The box plot and the supporting data frame indicate that the lower the Q4 to Q1 transaction ratio, the higher the chance the customers would cancel their accounts. The average Q4 to Q1 transaction ratio for customers that chose to cancel their accounts came out to be 0.555 while the customers that decided to retain the accounts had their Q4 to Q1 transaction ratio of 0.736 on average. 
+
+```{r}
+
+Q4toQ1ratio_active <- credit_card_df %>% filter(customer_status == "active") %>% summarize(mean(transaction_ratio_q4_q1))
+view(Q4toQ1ratio_active)
+
+Q4toQ1ratio_canceled <- credit_card_df %>% filter(customer_status == "closed_account") %>% summarize(mean(transaction_ratio_q4_q1))
+view(Q4toQ1ratio_canceled)
+
+df2 <- data.frame(Q4toQ1ratio_active, Q4toQ1ratio_canceled)
+colnames(df2) <- c("Q4 to Q1 ratio of Active Accounts","Q4 to Q1 ratio of Closed Accounts")
+view(df2)
+
+C <- ggplot(data=credit_card_df,aes(x= customer_status, y = transaction_ratio_q4_q1))  +geom_boxplot(show.legend = FALSE) +xlab("Customer Account Status") +ylab("Q4 to Q1 spending ratio") +ggtitle("The impact of Q4 to Q1 Transcations on \n Account retention") + center_title
+plot(C)
+
+```
+
+
+
+# Question 4
+
+
+**Question**:
+Is there any impact of account utilization ratio on the customer account retention?
+
+**Answer**:
+The violin plot with the help of the data frame reveal that the more utilized an account is, the greater the probability that the customer would retain it. The utilization ratio of the active accounts came out to be 0.289 while the utilization ratio of the canceled accounts was numbered at 0.161. 
+
+```{r}
+utilizationratio_active <- credit_card_df %>% filter(customer_status == "active") %>% summarize(mean(utilization_ratio))
+view(utilizationratio_active)
+
+utilizationratio_canceled <- credit_card_df %>% filter(customer_status == "closed_account") %>% summarize(mean(utilization_ratio))
+view(utilizationratio_canceled)
+
+df3 <- data.frame(utilizationratio_active, utilizationratio_canceled)
+colnames(df3) <- c("Utilization ratio of Active Accounts","Utilization ratio of Closed Accounts")
+view(df3)
+
+D <- ggplot(data=credit_card_df,aes(x= customer_status, y = utilization_ratio,fill=customer_status))  +geom_violin(show.legend = FALSE) +xlab("Customer Account Status") +ylab("Utilization Ratio") +ggtitle("The impact of Customer Account Utilization on \n the Account retention") + center_title
+plot(D)
+
+
+```
+
+
+
+# Question 5
+
+
+**Question**:
+How does customer's contact with the sales representatives impact their decision on whether to retain the services or cancel the account?
+
+**Answer**:
+The graph and the data frame explain how the sales agent outreach impact the customer's decision on whether to retain the services. The results seem counterintuitive as they reveal the trend that the more frequently the customer was contacted by the sales team, the higher the chance they'd cancel their account. The customers who were contacted 0.289 times on average last year decided to leave while the customers who were contacted far fewer number of times, 0.161 times, decided to stick with their services. 
+
+```{r}
+Sales_rep_active <- credit_card_df %>% filter(customer_status == "closed_account") %>% summarize(mean(contacted_last_year))
+view(Sales_rep_active)
+
+Sales_rep_canceled <- credit_card_df %>% filter(customer_status == "active") %>% summarize(mean(contacted_last_year))
+view(Sales_rep_canceled)
+
+df4 <- data.frame(Sales_rep_active, Sales_rep_canceled)
+
+df4 <- data.frame(utilizationratio_active, utilizationratio_canceled)
+colnames(df4) <- c("Number of times contacted last year by sales representatives for Active accounts (Average)","Number of times contacted last year by sales representatives for canceled accounts (Average)")
+view(df4)
+
+E <- ggplot(data=credit_card_df,aes(x= customer_status, y =contacted_last_year))  +geom_bar(show.legend = FALSE, stat="summary",position = "dodge", fun = "mean") +xlab("Customer Account Status") +ylab("Times contacted last year by sales rep (Avg)") +ggtitle("The impact of Sales contact on \n the Account retention") + center_title
+plot(E)
+
+```
+
+
+
+
+# Machine Learning
+
+In this section, three classification algorithms were fit to the data in order to predict the variable `customer_status`.
+
+
+The data was split and feature engineering steps were implemented to ensure that models were using the same data and feature engineering steps for training.
+
+- The data was Split into a training and test set. A seed was used to order to ensure results could be replicated. 
+- A feature engineering pipeline with the `recipes` package was specified. 
+    - Skewness transformation, correlation filters, dummy variable encoding or any other steps were implemented where appropriate
+- A `parsnip` model object was specified. 
+    
+- The workflow was fit to the training data
+ 
+  
+- The best model was selected with `select_best()` and workflow was finalized.
+
+- The model performance was evaulated on the test set by plotting an ROC curve using `autoplot()` and calculating the area under the ROC curve on the test data
+
+
+
+
+# Model 1
+
+```{r}
+# Logistic Classification Model
+set.seed(500)
+
+credit_split <- initial_split(credit_card_df, prop = 0.75, 
+                                strata = customer_status)
+
+credit_split
+
+credit_training <- credit_split %>% training()
+credit_training
+
+credit_testing <- credit_split %>% testing()
+credit_testing
+
+credit_recipe <- recipe(customer_status ~ .,
+                          data = credit_training)
+summary(credit_recipe)
+
+credit_transformations <- recipe(customer_status ~ transactions_last_year + transaction_ratio_q4_q1 + utilization_ratio + spend_ratio_q4_q1 + total_accounts + credit_limit + age + income + months_inactive_last_year + contacted_last_year, data = credit_training)  %>% 
+                            # Transformation steps
+  step_corr(all_numeric(), -all_outcomes(), threshold = 0.75) %>%
+                            step_YeoJohnson(all_numeric(), -all_outcomes()) %>%
+                            step_normalize(all_numeric(), -all_outcomes()) %>% 
+                            step_dummy(all_nominal(), -all_outcomes()) %>% 
+                            # Train transformations on employee_training
+                            prep(training = credit_training)
+
+# Apply to credit_testing
+credit_transformations %>% 
+  bake(new_data = credit_testing)
+
+logistic_model <- logistic_reg() %>% 
+                  set_engine('glm') %>% 
+                  set_mode('classification')
+credit_wf <- workflow() %>% 
+            add_model(logistic_model) %>% 
+            add_recipe(credit_recipe)
+
+credit_logistic_fit <- credit_wf %>% 
+                      fit(data = credit_training)
+
+credit_trained_model <- credit_logistic_fit %>% 
+                       pull_workflow_fit()
+
+vip(credit_trained_model)
+
+my_metrics <- metric_set(accuracy,sens,spec,f_meas,roc_auc)
+
+last_fit_model <- credit_wf %>% 
+                  last_fit(split = credit_split,
+                           metrics = my_metrics)
+last_fit_model %>% 
+  collect_metrics()
+
+last_fit_results <- last_fit_model %>% 
+                     collect_predictions()
+
+last_fit_results
+
+last_fit_results %>% roc_curve(truth = customer_status, estimate = .pred_closed_account) %>%autoplot()
+conf_mat(last_fit_results, truth = customer_status , estimate = .pred_class)
+
+
+
+```
+
+
+
+
+
+# Model 2
+
+```{r}
+#Quadratic Discriminant Model
+set.seed(500)
+qda_model <- discrim_regularized(frac_common_cov = 0) %>% 
+             set_engine('klaR') %>% 
+             set_mode('classification')
+
+qda_wf <- workflow() %>% 
+          add_model(qda_model) %>% 
+          add_recipe(credit_transformations)
+
+last_fit_qda <- qda_wf %>% 
+                last_fit(split = credit_split)
+
+last_fit_qda %>% collect_metrics()
+
+qda_predictions <- last_fit_qda %>% 
+                     collect_predictions()
+
+qda_predictions
+
+qda_predictions %>% 
+roc_curve(truth = customer_status, .pred_closed_account) %>% 
+autoplot()
+
+f_meas(qda_predictions, truth = customer_status, estimate = .pred_class)
+
+conf_mat(qda_predictions, truth = customer_status, estimate = .pred_class)
+
+```
+
+
+
+
+
+# Model 3
+
+```{r}
+# Random Forest
+set.seed(500)
+
+rf_model <- rand_forest(mtry = tune(),
+                        trees = tune(),
+                        min_n = tune()) %>% 
+            set_engine('ranger', importance = "impurity") %>% 
+            set_mode('classification')
+rf_workflow <- workflow() %>% 
+               add_model(rf_model) %>% 
+               add_recipe(credit_transformations)
+
+credit_folds <- vfold_cv(credit_training, v = 5)
+
+set.seed(500)
+
+rf_grid <- grid_random(mtry() %>% range_set(c(3, 7)),
+                       trees(),
+                       min_n(),
+                       size = 7)
+
+rf_grid
+
+
+
+# Tuning random forest workflow
+rf_tuning <- rf_workflow %>% 
+             tune_grid(resamples = credit_folds,
+                       grid = rf_grid)
+
+rf_tuning %>% show_best('roc_auc')
+
+best_rf <- rf_tuning %>% 
+           select_best(metric = 'roc_auc')
+
+# View the best parameters
+best_rf
+
+final_rf_workflow <- rf_workflow %>% 
+                     finalize_workflow(best_rf)
+
+rf_wf_fit <- final_rf_workflow %>% 
+             fit(data = credit_training)
+
+rf_fit <- rf_wf_fit %>% 
+          pull_workflow_fit()
+
+vip(rf_fit)
+
+rf_last_fit <- final_rf_workflow %>% 
+               last_fit(credit_split)
+
+rf_last_fit %>% collect_metrics()
+
+rf_last_fit %>% collect_predictions() %>% 
+                roc_curve(truth  = customer_status, estimate = .pred_closed_account) %>% 
+                autoplot()
+
+rf_predictions <- rf_last_fit %>% collect_predictions()
+
+conf_mat(rf_predictions, truth = customer_status, estimate = .pred_class)
+
+
+```
+
+
+
+```{r}
+
+```
+
+# Summary of Results
+
+
+**Summary**
+
+Introduction
+
+The goal of the project was to perform an explanatory followed by a predictive data analysis on data set of credit card accounts of a large U.S. bank in order to determine factors impacting customers cancelling their credit card accounts. The second part of the project comprised of data based informed predictions with the employment of Machine Learning algorithms in order to determine whether a customer will cancel their account in the future. The bank has seen a record number of people cancel their credit accounts which in turn is triggering a huge decline in their revenues. The bank is focused upon retaining maximum number of customers on credit accounts in order to improve their revenues. An in-depth knowledge of factors influencing customer decisions would greatly help the bank improve their procedures and provide targeted incentives to the customers which could prove to be of great value to the organization. A set of 5 questions was designed and answered so as to maximize the value of the insights extracted. The questions explored how customer income, card type, customer’s account spending, Q4 to Q1 transaction ratio and card utilization impacted their decision on whether to discontinue credit accounts. The questions also investigated how customer's contact with the sales representatives impacted their decision on whether to retain the services or cancel the account.
+
+Key Findings
+
+A lot of interesting observations were made while analyzing the data set. The customer's average income seemed to have very little effect on the customer's decision to retain the account. The general trend that the customer's that fell on the lower end of the income spectrum were more inclined to close their account was violated by the Gold account holders where the average income for the customers who canceled their accounts came out to be $65,357, a number significantly greater than the average income for the gold customers that chose to keep their accounts, $62,304. The card type, however, did seem to influence customer's decision. The churn rate for the blue card holders came out to be highest as 1497 users chose to close their accounts while only 1054 decided to keep their accounts. Silver card holders showcased the best user retention where 872 customers opted to continue using the services and only 296 chose to have their cards canceled. This knowledge can help the company design strategies so as to acquire customer base which with have a great likelihood of retaining the bank’s services. The graphs and the data frame make it very clear that the more a customer spends using their account, the greater the likelihood of them deciding to keep their accounts. Similarly, the data also revelated that  that the more utilized an account is, the greater the probability that the customer would retain it. Knowing this, the company could work to incentivize and encourage their clients to spend more using the card which could result in the bank seeing increasing revenues. The explanatory analysis also revealed that the lower the Q4 to Q1 transaction ratio, the higher the chance the customers would cancel their accounts. This information could encourage the bank to run their mass advertisement campaigns primarily in the fourth quarter so as to improve the customer Q4 to Q1 transaction ratio which in turn could positively impact the customer retention rate. A trend that, the more frequently the customer was contacted by the sales team, the higher the chance they'd cancel their account, was observed. This finding could encourage the company to re-evaluate their customer outreach programs so as to implement measures that would not cause their customers any inconvenience. 
+
+“Best” classification model
+
+Three classification models were applied to the given dataset. A set of 10 highly important predictor variables was extracted using the importance scores of the Random Forest model. The importance scores were based on the randomly chosen predictor variables, through the mtry() hyperparameter, that had the greatest predictive power. These predictor variables were then fed into the parsnip recipe function as part of the feature engineering process. The same seed and feature engineering steps were used for all of three models in order to draw fair comparisons. Logistic regression, Quadratic Discriminant model and Random Forest were executed in order to determine which of these had the best performance on our dataset. Random Forest had the best performance as per the Roc_auc and Confusion Matrix parameters. The Roc_auc came out to be 0.96 for the model which is considered highly reliable. The confusion matrix revealed similar results as only 112 out of 1157 data points were classified incorrectly. There were 54 False Negative classifications produced by this model. This number is of very high importance to the purpose of the analysis as these were the customers which the model predicted as unlikely to close their accounts but they actually did close their accounts. 
+
+Recommendations
+
+The churn rate for the blue card holders came out to be highest as 1497 users chose to close their accounts while only 1054 decided to keep their accounts. Silver card holders showcased the best user retention where 872 customers opted to continue using the services and only 296 chose to have their cards canceled. The bank should try to encourage customers that qualify for the silver card to sign up with them. This will help improve the retention rate as Silver card holders showcased minimum churn rate. Additionally, the bank could also chose to investigate the high churn ratio for the blue card holders. The bank could run incentive programs in order to retain those customers. 
+
+The average last year spendings for the customers that chose to keep their accounts was $4596, a number considerably higher than those of the customers which decided against keeping their account, $3120. Based upon this information, the bank could incentivize customers that do a lot of shopping using their credit cards. This should directly impact the customer decision in favour of staying with the bank.
+
+The lower the Q4 to Q1 transaction ratio, the higher the chance the customers would cancel their accounts. The average Q4 to Q1 transaction ratio for customers that chose to cancel their accounts came out to be 0.555 while the customers that decided to retain the accounts had their Q4 to Q1 transaction ratio of 0.736 on average. Taking this stat into consideration, the bank should hold back most of their major marketing campaigns for the last quarter of the year. This should help the bank with the client retention as a higher Q4 to Q1 ratio favors the bank.
+
+The data suggests that the more utilized an account is, the greater the probability that the customer would retain it. The utilization ratio of the active accounts came out to be 0.289 while the utilization ratio of the canceled accounts was numbered at 0.161. Although, a lower utilization ratio is good for the bank but when it falls below a certain threshold, the churn rate rises. The bank could use this information to provide special incentives to the customers who have the account utilization ratio of more than 0.25 but less than 0.40. 
+
+The customers who were contacted 0.289 times on average by the sales team last year decided to leave while the customers who were contacted far fewer number of times, 0.161 times, decided to stick with their services. The results seem counterintuitive as they reveal the trend that the more frequently the customers were contacted by the sales team, the higher the chance they'd cancel their account. This information should serve as a red flag. The company should look to investigate and enhance their sales strategy. They should immediately cut back on the number of sale calls each of their customers get each year. This would help improve their customer retention rate.  
+
+
+
+
+
