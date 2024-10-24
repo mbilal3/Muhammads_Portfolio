@@ -42,4 +42,5 @@ Top 25 Most Frequent word Count Distribution (Fox News Article)
 
 
  ![](NLP_Python_NLTK_Project/freq_dist_theindependent.png) 
+ 
  Top 25 Most Frequent word Count Distribution (The Independent News Article) 
