@@ -20,3 +20,9 @@ The goal of the project was to perform an explanatory analysis followed by a pre
 
 ![](Machine_Learning_Driven_Customer_Churn_Analysis/rand_forest2.png)
 <p align="center">Graph displaying the ROC_AUC Curve for the Random Forest model. The AUC value of 0.96 indicates that the model is highly reliable and hence was the best performing on this dataset </p>
+
+# [The Impact of Various Characteristics of the Cell Nuclei on the Formation of Breast Cancer](https://github.com/mbilal3/Muhammads_portfolio/tree/main/Health_Analytics_Project)
+
+The prime objective of the research was to develop a Machine Learning model that predicts whether a cell is malignant or benign based on the various characteristics of the cell nuclei. The study was aimed at analyzing the 32 attributes part of the Wisconsin breast cancer research dataset in order to choose a subset of attributes that gives the best model performance in terms of predicting the response variable which is the diagnosis column. Furthermore, another key goal of study was to create visuals to display the results in a presentable manner. The visuals were expected to present performance metrics for each of the models executed. 
+
+
