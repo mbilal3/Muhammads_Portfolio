@@ -23,3 +23,6 @@ The first step of the feature selection process was to check for statistically s
 ![](rf_auc.png)
 <p align="center">ROC curve for the Random Forest model </p>
 
+![](roc_knn.jpeg)
+<p align="center">ROC curve for the KNN model </p>
+
