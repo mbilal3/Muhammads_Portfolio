@@ -26,3 +26,7 @@ The goal of the project was to perform an explanatory analysis followed by a pre
 The prime objective of the research was to develop a Machine Learning model that predicts whether a cell is malignant or benign based on the various characteristics of the cell nuclei. The study was aimed at analyzing the 32 attributes part of the Wisconsin breast cancer research dataset in order to choose a subset of attributes that gives the best model performance amongst KNN, Random Forest, and Logistic Regression models in terms of predicting the response variable which is the diagnosis column. Furthermore, another key goal of study was to create visuals to display the results in a presentable manner. The visuals were expected to present performance metrics for each of the models executed. 
 ![](Health_Analytics_Project/performance_comparisions.png)
 <p align="center">Horizontal Bar chart summarizing performance metrics for each of the models </p>
+
+# [NLP News Article Analysis with Python and NLTK](https://github.com/mbilal3/Muhammads_portfolio/tree/main/NLP_Python_NLTK_Project)
+
+As a part of the project, I explored two news articles using Python and the NLTK library. The process involved the generation of word frequency counts and plots (with stop words eliminated) for each article. I also analyzed if there was a difference in vocabulary or sentiment between the two articles and speculated about any observed differences.
