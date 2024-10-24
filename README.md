@@ -1,4 +1,4 @@
-# Muhammads_portfolio
+# Muhammad Bilal's Portfolio
 Analytics Portfolio
 
 # [Auto Claims Exploratory Data Analysis](https://github.com/mbilal3/Muhammads_portfolio/tree/main/Auto_Claim_Analysis)
