@@ -1,4 +1,3 @@
-theme: jekyll-theme-dinky
 # Muhammad Bilal's Analytics Portfolio
 
 
