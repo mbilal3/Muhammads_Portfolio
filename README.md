@@ -38,3 +38,9 @@ As a part of the project, I explored two news articles using Python's NLTK libra
  
 
 <p align="center"> Top 25 Most Frequent word Count Distribution (Fox News Article) </p>
+
+<div align="center"> 
+
+ ![](NLP_Python_NLTK_Project/freq_dist_theindependent.png) </div>
+ <p align="center"> Top 25 Most Frequent word Count Distribution (The Independent News Article) </p>
+ 
