@@ -16,3 +16,6 @@ The first step of the feature selection process was to check for statistically s
 
 ![](performance_comparisions.png)
 <p align="center">Horizontal Bar chart summarizing performance metrics for each of the models </p>
+
+![](roc_logistic_reg.jpeg)
+<p align="center">ROC curve for the logistic regression model </p>
