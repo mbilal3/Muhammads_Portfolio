@@ -45,4 +45,6 @@ Top 25 Most Frequent word Count Distribution (Fox News Article)
  
  Top 25 Most Frequent word Count Distribution (The Independent News Article) 
 
-# [Mortality Analysis for the City of New York](https://github.com/mbilal3/Muhammads_portfolio/blob/main/NY_Leading_Cause_of_Deaths_Analysis/Project%20Documentation.pdf)) 
+# [Mortality Analysis for the City of New York](https://github.com/mbilal3/Muhammads_portfolio/blob/main/NY_Leading_Cause_of_Deaths_Analysis/Project%20Documentation.pdf)
+This was a polyglot programming project where Python programming language was utlized for data cleaning and re-structuring purposes, leveraging Jupiter Notebook as the primary tool for exploration. The data was also inserted into the Oracle Sql developer in order to execute some basic queries and create a table schema. The data visualization techniques were employed using R programming in order to present analysis outcomes effectively, enhancing data insights, translating the research findings into informative visualizations, showcasing trends and patterns in mortality causes. The statistical techniques were applied in order to derive meaningful insights from the dataset, contributing to informed conclusions.
+
