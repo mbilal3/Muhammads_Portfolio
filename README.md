@@ -52,6 +52,12 @@ This was a polyglot programming project where Python programming language was ut
 
 <p align="center">Key Findings: Top 20 causes of Dealth in NYC as per the Dataset analyzed </p>
 
+# [Extracting Data from Websites using Python (BeautifulSoup library)](https://github.com/mbilal3/Muhammads_portfolio/tree/main/Screen_Scraping_Extract_Data_from_Websites)
+The project involved the utlization of Python's BeautifulSoup library in order to extract, clean, and explore the Top500 datasets. The data was obtained from the top 500 website. (https://top500.org).
+As a result of the analysis, I created 3 csv datasets: for US, China, and Japan. Alternately, created one dataset with all three countries combined and appropriately labeled. The data cleaning was performed using the Python String Fuction. The dataset was then leveraged to explore the following parameters: 
 
+- For each country, compare summary stats and visualizations for Rank, Cores, Rpeak, and Power were analyzed.
+- Which countries has the best stats in each category were examined. 
+- Listed the most frequently used processors for each country’s supercomputers.
 
 
