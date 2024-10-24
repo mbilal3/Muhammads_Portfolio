@@ -39,8 +39,7 @@ As a part of the project, I explored two news articles published around the subj
 
 Top 25 Most Frequent word Count Distribution (Fox News Article) 
 
-<div align="center"> 
 
- ![](NLP_Python_NLTK_Project/freq_dist_theindependent.png) </div>
- <p align="center"> Top 25 Most Frequent word Count Distribution (The Independent News Article) </p>
- 
+
+ ![](NLP_Python_NLTK_Project/freq_dist_theindependent.png) 
+ Top 25 Most Frequent word Count Distribution (The Independent News Article) 
