@@ -17,4 +17,5 @@ The goal of the project was to perform an explanatory analysis followed by a pre
 < br/> 
 ![](Machine_Learning_Driven_Customer_Churn_Analysis/Rand_forest1.png)
 <p align="center">Top 10 highly important predictor variables extracted using the importance scores of the Random Forest model </p>
+
 ![](Machine_Learning_Driven_Customer_Churn_Analysis/rand_forest2.png)
